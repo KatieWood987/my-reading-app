@@ -5,7 +5,7 @@ A modern, engaging reading comprehension tool built for EdAccelerator's English 
 ## Overview
 Students read a passage broken into manageable sections and answer a mix of question types (multiple-choice, short-answer, and open-ended). Open-ended answers are evaluated using OpenAI for semantic similarity, making the experience fairer and more educational. The app includes gamification, adaptive difficulty, and a fun bee theme.
 
-Live Demo: [Add your Vercel URL here]
+Live Demo: (https://my-reading-app-e3mg.vercel.app/)
 
 ## Interpretation of User Feedback
 - **"Annoying seeing the entire passage at once"** → Passage is broken into navigable sections with Prev/Next buttons and a search function.
@@ -35,6 +35,9 @@ Live Demo: [Add your Vercel URL here]
 - Tailwind CSS
 - OpenAI (GPT-4o-mini)
 - Deployed on Vercel
+
+## Time Spent
+- 6 hours
 
 ## How to Run Locally
 ```bash
