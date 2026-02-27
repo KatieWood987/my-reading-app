@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Reading Comprehension Interface - EdAccelerator Assessment
 
-## Getting Started
+A modern, engaging reading comprehension tool built for EdAccelerator's English Program. This interface replaces the old multiple-choice format with interactive, AI-powered questions that promote real understanding rather than guessing.
 
-First, run the development server:
+## Overview
+Students read a passage broken into manageable sections and answer a mix of question types (multiple-choice, short-answer, and open-ended). Open-ended answers are evaluated using OpenAI for semantic similarity, making the experience fairer and more educational. The app includes gamification, adaptive difficulty, and a fun bee theme.
 
+Live Demo: [Add your Vercel URL here]
+
+## Interpretation of User Feedback
+- **"Annoying seeing the entire passage at once"** → Passage is broken into navigable sections with Prev/Next buttons and a search function.
+- **"Multiple choice is too easy, I can just guess"** → Replaced with typed short-answer and open-ended questions. Open-ended answers are scored using AI semantic similarity.
+- **"I finish and immediately forget what I read"** → Questions are interleaved with the passage sections and include detailed explanations after each attempt.
+- **"When I get an answer wrong, I don’t really learn why"** → Clear explanations are shown after every submission.
+- **"Feels like a test, not learning"** → Added gamification with streak tracking and badges.
+- **"Can’t find a specific part quickly"** → Built-in search across the passage.
+- **"My younger brother is slower at reading"** → Adaptive difficulty: slower answer times automatically filter out hard questions.
+
+## AI Approach
+- Questions were pre-generated using **OpenAI GPT-4o-mini** via a build-time script for consistency and cost control.
+- For open-ended and short-answer questions, answers are evaluated in real-time using semantic similarity via the `/api/evaluate` endpoint.
+- This ensures paraphrases and genuine understanding are rewarded rather than exact wording.
+
+## Key Features & Decisions
+- **Sectioned Passage** with navigation and search for better readability and retention.
+- **Mixed Question Types** with typed input (no multiple-choice guessing).
+- **AI-Powered Scoring** for open-ended questions.
+- **Gamification**: Live streak counter and badges (e.g., "Streak Master" at 3 consecutive correct answers).
+- **Adaptive Difficulty**: Tracks time per question and automatically removes hard questions for slower readers.
+- **Fully Responsive** design that works well on both mobile and desktop.
+
+## Technical Stack
+- Next.js 14 (App Router)
+- TypeScript
+- Tailwind CSS
+- OpenAI (GPT-4o-mini)
+- Deployed on Vercel
+
+## How to Run Locally
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
