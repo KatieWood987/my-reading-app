@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { questions } from '@/lib/questions'; 
+import Confetti from 'react-confetti';
 
 type Question = { 
   id: number;
@@ -19,6 +20,10 @@ export default function QuestionSection() {
   const [score, setScore] = useState(0);
   const [userInput, setUserInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [streak, setStreak] = useState(0);
+  const [maxStreak, setMaxStreak] = useState(0); // New: Track highest streak
+  const [badges, setBadges] = useState<string[]>([]);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const q = questions[currentQuestion];
 
@@ -27,10 +32,10 @@ export default function QuestionSection() {
 
     setIsLoading(true);
 
-    console.log('Question type:', q.type); // Debug
+    console.log('Question type:', q.type);
 
     let isCorrect: boolean;
-    if (q.type === 'open' || q.type === 'short') { // Fix: Include 'short' for AI eval (or just 'open' if preferred)
+    if (q.type === 'open' || q.type === 'short') { 
       try {
         const res = await fetch('/api/evaluate', {
           method: 'POST',
@@ -39,7 +44,7 @@ export default function QuestionSection() {
         });
         if (!res.ok) throw new Error(`API failed: ${res.status}`);
         const data = await res.json();
-        console.log('API data:', data); // Debug
+        console.log('API data:', data);
         isCorrect = data.isCorrect;
       } catch (error) {
         console.error('Fetch error:', error); 
@@ -49,11 +54,30 @@ export default function QuestionSection() {
       isCorrect = userAnswer.trim().toLowerCase() === q.answer.trim().toLowerCase();
     }
 
+    console.log('isCorrect for question', q.id, ':', isCorrect); // Debug
+
     setAnswers({ ...answers, [q.id]: { userAnswer, isCorrect } });
-    if (isCorrect) setScore(score + 1);
+    if (isCorrect) {
+      setScore(score + 1);
+      const newStreak = streak + 1;
+      setStreak(newStreak);
+      setMaxStreak(Math.max(maxStreak, newStreak)); // Update max
+      if (newStreak === 3) {
+        setBadges([...badges, 'Streak Master']);
+      }
+      setShowConfetti(true); setTimeout(() => setShowConfetti(false), 3000);
+    } else {
+      setStreak(0);
+    }
+
+    console.log('Current streak:', streak); // Debug
+    console.log('Badges:', badges); // Debug
+
     setShowExplanation(true);
     setUserInput('');
     setIsLoading(false);
+  
+    
   };
 
   const nextQuestion = () => {
@@ -62,11 +86,18 @@ export default function QuestionSection() {
   };
 
   if (currentQuestion >= questions.length) {
-    return <div className="text-center text-2xl font-bold">Score: {score}/{questions.length}</div>;
+    return (
+      <div className="text-center text-2xl font-bold">
+        Score: {score}/{questions.length}
+        <p>Max Streak: {maxStreak}</p> 
+        <p>Badges: {badges.join(', ') || 'None earned yet'}</p> 
+      </div>
+    );
   }
 
   return (
     <div className="max-w-2xl mx-auto mt-8 bg-white p-6 rounded-lg shadow-md">
+      <p className="text-sm text-gray-600 mb-2">Current Streak: {streak}</p> {/* New: Display during quiz */}
       <h2 className="text-xl font-semibold mb-4">{q.text}</h2>
       {q.type === 'multiple' && q.options && (
         <div className="space-y-2">
@@ -103,6 +134,7 @@ export default function QuestionSection() {
           <button onClick={nextQuestion} className="mt-2 bg-blue-500 text-white px-4 py-2 rounded">Continue</button>
         </div>
       )}
+      {showConfetti && <Confetti />}
     </div>
   );
 }
