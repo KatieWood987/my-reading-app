@@ -1,6 +1,6 @@
 'use client'; // Client component for state
 import { useState, useEffect } from 'react';
-import { passage } from '@/lib/passage';
+import { passage } from '../lib/passage';
 import { useReading } from '@/context/ReadingContext';
 
 export default function PassageViewer() {
