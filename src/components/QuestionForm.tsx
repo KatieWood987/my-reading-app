@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { questions } from '@/lib/questions'; 
+import { questions } from '../lib/questions'; 
 import Confetti from 'react-confetti';
 
 type Question = { 
