@@ -42,25 +42,39 @@ export default function PassageViewer() {
 
   const filteredSections = sections.filter((sec) => sec.toLowerCase().includes(searchTerm.toLowerCase()));
 
-  return (
-    <div className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
-      <h1 className="text-3xl font-bold mb-4">{passage.title}</h1>
-      <input
-        type="text"
-        placeholder="Search passage..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="w-full p-2 mb-4 border rounded"
-      />
-      <div className="prose mb-6">
-        {searchTerm ? filteredSections.map((sec, i) => <p key={i}>{sec}</p>) : <p>{sections[currentSection]}</p>}
-      </div>
-      {!searchTerm && (
-        <div className="flex justify-between">
-          <button onClick={() => setCurrentSection(Math.max(0, currentSection - 1))} disabled={currentSection === 0} className="bg-blue-500 text-white px-4 py-2 rounded">Prev</button>
-          <button onClick={() => setCurrentSection(Math.min(sections.length - 1, currentSection + 1))} disabled={currentSection === sections.length - 1} className="bg-blue-500 text-white px-4 py-2 rounded">Next</button>
-        </div>
-      )}
+return (
+  <div className="w-full max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md text-zinc-900">
+    <h1 className="text-3xl font-bold mb-4 text-zinc-900">{passage.title}</h1>
+    <input
+      type="text"
+      placeholder="Search passage..."
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      className="w-full p-2 mb-4 border rounded text-base sm:text-lg text-zinc-900"
+    />
+    <div className="prose mb-6 text-zinc-900 leading-relaxed">
+      {searchTerm 
+        ? filteredSections.map((sec, i) => <p key={i} className="text-zinc-900">{sec}</p>) 
+        : <p className="text-zinc-900">{sections[currentSection]}</p>}
     </div>
-  );
+    {!searchTerm && (
+      <div className="flex flex-col md:flex-row justify-between gap-3">
+        <button 
+          onClick={() => setCurrentSection(Math.max(0, currentSection - 1))} 
+          disabled={currentSection === 0} 
+          className="w-full md:w-auto bg-blue-500 text-white px-4 py-2 rounded text-base sm:text-lg"
+        >
+          Prev
+        </button>
+        <button 
+          onClick={() => setCurrentSection(Math.min(sections.length - 1, currentSection + 1))} 
+          disabled={currentSection === sections.length - 1} 
+          className="w-full md:w-auto bg-blue-500 text-white px-4 py-2 rounded text-base sm:text-lg"
+        >
+          Next
+        </button>
+      </div>
+    )}
+  </div>
+);
 }
