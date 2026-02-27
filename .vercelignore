@@ -1,0 +1,7 @@
+scripts/
+.env.local
+.env
+*.mts
+*.ts
+.next/
+node_modules/
