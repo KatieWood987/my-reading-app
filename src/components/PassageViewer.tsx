@@ -1,11 +1,39 @@
 'use client'; // Client component for state
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { passage } from '@/lib/passage';
+import { useReading } from '@/context/ReadingContext';
 
 export default function PassageViewer() {
-  const sections = passage.content.split('\n\n'); // Split into paragraphs
+  const sections = passage.content.split('\n\n').map(sec => sec.trim()).filter(sec => sec.length > 0); // Fix: Trim/filter empty
   const [currentSection, setCurrentSection] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
+  const [sectionTimes, setSectionTimes] = useState<number[]>([]);
+
+  const { setAverageTime } = useReading();
+
+  useEffect(() => {
+    console.log('Passage title:', passage.title); // Debug: Import check
+    console.log('Passage content length:', passage.content.length); // Debug: Empty check
+    console.log('Sections length:', sections.length); // Debug: Split check
+    console.log('Current section content:', sections[currentSection] || 'Empty'); // Debug: Display check
+    console.log('Search term:', searchTerm); // Debug: Filter check
+  }, [currentSection, searchTerm, sections]); // Run on changes
+
+  useEffect(() => {
+    const start = Date.now();
+    console.log('Timing started for section', currentSection);
+    return () => {
+      const time = Date.now() - start;
+      if (time > 0) {
+        const newTimes = [...sectionTimes, time];
+        setSectionTimes(newTimes);
+        const avg = newTimes.reduce((a, b) => a + b, 0) / newTimes.length || 0;
+        setAverageTime(avg);
+        console.log('Time for section', currentSection, ':', time, 'ms');
+        console.log('New average time:', avg, 'ms');
+      }
+    };
+  }, [currentSection]);
 
   const filteredSections = sections.filter((sec) => sec.toLowerCase().includes(searchTerm.toLowerCase()));
 
